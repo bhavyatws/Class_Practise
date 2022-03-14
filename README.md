@@ -1,2 +1,3 @@
 # Blog-app
-Blog app with class based views
+
+Create a Blog app by only using class based views.
