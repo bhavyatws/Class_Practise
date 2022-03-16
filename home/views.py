@@ -1,8 +1,7 @@
 
-from msilib.schema import ListView
-from pyexpat import model
-import re
-from tempfile import tempdir
+
+
+
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic import TemplateView
@@ -22,14 +21,59 @@ from django.urls import reverse_lazy
 from django.views import generic
 from django.contrib import messages
 from django.shortcuts import redirect
-from django.views.generic import DetailView,ListView
+from django.views.generic import DetailView,ListView,CreateView,UpdateView,DeleteView
+from django.views.generic.edit import FormView,CreateView,ProcessFormView
+from django.utils.text import slugify
+from django.contrib.auth.mixins import LoginRequiredMixin
 # Create your views here.
 class Home(ListView):
     template_name='blog.html'
     model=Blog
     paginate_by=4
-    ordering=['id']
+    ordering=['author_id']
     paginate_orphans = 1
+
+class ContinueReading(DetailView):
+    model=Blog
+    template_name='blog_post.html'
+
+
+class BlogUpdateView(LoginRequiredMixin, UpdateView):
+    model = Blog
+    template_name='updatepost.html'
+    fields = ["title", "description", "thumbnail",]
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        update = True
+        context['update'] = update
+
+        return context
+   
+    def get_success_url(self):
+        messages.success(
+            self.request, 'Your post has been updated successfully.')
+        return reverse_lazy("home")
+
+    
+
+    def get_queryset(self):
+       return  self.model.objects.filter(author=self.request.user)
+       
+   
+
+class BlogDeleteView(LoginRequiredMixin, DeleteView):
+    model = Blog
+    template_name='deletepost.html'
+    def get_success_url(self):
+        messages.success(
+            self.request, 'Your post has been deleted successfully.')
+        return reverse_lazy("home")
+
+    def get_queryset(self):
+        return self.model.objects.filter(author=self.request.user)
+
+
 class Login(LoginView):
     template_name='authentication/login.html'
     authentication_form=LoginForm
@@ -77,8 +121,16 @@ class Register(generic.CreateView):
         messages.success(self.request, f'Account created successfully')
         return super().form_valid(form)
 
-class Search(TemplateView):
-    template_name='blog.html'
+class Search(ListView):
+    model=Blog
+    template_name='search_result.html'
+    def get_queryset(self):
+        query = self.request.GET.get('query')
+        object_list = self.model.objects.all()
+        if query:
+            object_list = object_list.filter(Q(title__icontains=query)|Q(description__icontains=query))
+        return object_list
+    
 
 class ConfirmLogout(TemplateView):
     template_name='authentication/logout.html'    
@@ -97,7 +149,22 @@ class AccountVerify(TemplateView):
         user.save()
         messages.success(self.request,"Your account has been verified")
        
+
+class AddPost(CreateView,ProcessFormView):
+    template_name = 'addpost.html'
+    model=Blog
+    fields=['title','description','thumbnail']
+    # form_class = AddPostForm
+    def get_success_url(self):
+        messages.success(
+            self.request, 'Your blog has been created successfully.')
+        return reverse_lazy("home")
+    def form_valid(self, form):
+        blog = form.save(commit=False)
+        blog.author = self.request.user
+        # blog.save()
         
-        
-        #do something with this user
+        blog.slug=slugify(form.cleaned_data['title'])
+        #article.save()  # This is redundant, see comments.
+        return super(AddPost, self).form_valid(form)
     

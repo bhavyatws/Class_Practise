@@ -26,7 +26,7 @@
 
 {% endblock css %} {% block content %}
 
-<div class="text-center container">
+<div class="container">
     {% if messages %}
     {% for message in messages %}
     
@@ -38,13 +38,16 @@
       </div>
       {% endfor %}
       {% endif %}
+
     <main class="form-signin container w-50">
+        
         <form method="POST" action="{% url 'signin' %}" novalidate>
             {% csrf_token %} 
             <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
-            
+            {% comment %} {{form}} {% endcomment %}
             {% for fm in form %}
+            
             <div>
                 {{fm.label_tag}}{{fm}}
                 <small>{{fm.error|striptags}}</small>

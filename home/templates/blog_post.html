@@ -17,10 +17,12 @@
 
 
         <article class="blog-post">
-            <h2 class="blog-post-title">{{blog.title}}</h2>
             <p class="blog-post-meta">
                 <h5>{{blog.date_created}}, Author:{{blog.author.first_name}}</h5>
             </p>
+            <h2 class="blog-post-title">{{blog.title}}</h2>
+            <img src="{{blog.thumbnail.url}}" >
+           
 
             <p>
                 <h6>{{blog.description}}</h6>

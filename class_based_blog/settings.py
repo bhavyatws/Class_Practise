@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'home',
+    'django.contrib.humanize',
 ]
 
 MIDDLEWARE = [
@@ -136,4 +137,6 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = config['EMAIL_HOST_USER']
 print(EMAIL_HOST_USER)
 EMAIL_HOST_PASSWORD = config['EMAIL_HOST_PASSWORD']
-
+#Configuring media 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media') # 'media' is my media folder
+MEDIA_URL = '/media/'

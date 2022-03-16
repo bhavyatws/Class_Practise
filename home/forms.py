@@ -37,7 +37,7 @@ class LoginForm(AuthenticationForm):
 
 #Creating Form for Registration
 # from django.contrib.auth.models import User
-from . models import User
+from . models import Blog, User
 
 from django.contrib.auth.forms import UserCreationForm
 
@@ -50,3 +50,12 @@ class UserRegisterForm(UserCreationForm):
       widgets={
           'email':forms.EmailInput(attrs={'class':'form-control'})
       }
+# class AddPostForm(FormView):
+  
+
+#   class Meta:
+#       model = Blog
+#       fields = ['title', 'description','thumbnail']
+#       widgets={
+#           'email':forms.EmailInput(attrs={'class':'form-control'})
+#       }

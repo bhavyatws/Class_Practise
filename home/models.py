@@ -5,6 +5,8 @@ from django.db import models
 from django.contrib.auth.models import BaseUserManager,PermissionsMixin,AbstractBaseUser
 from django.utils.timezone import now
 from datetime import date
+from django.template.defaultfilters import slugify # new
+from django.urls import reverse
 
 # Create your models here.
 #Create your customuser model here
@@ -61,15 +63,27 @@ class User(AbstractBaseUser,PermissionsMixin):
 class Blog(models.Model):
     author=models.ForeignKey(User,null=True,on_delete=models.CASCADE)
     post_id=models.AutoField(primary_key=True)
-    slug=models.CharField(max_length=130,blank=True)
+    slug=models.CharField(max_length=130,blank=True,unique=True)
     title=models.CharField(max_length=100,null=True)
     description=models.TextField(null=True)
-    thumbnail=models.ImageField(default="userprofile.png",upload_to='static',null=True)
+    thumbnail=models.ImageField(default="userprofile.png",upload_to='Images',null=True)
     date_created=models.DateField(auto_now=True,null=True)
     viewers = models.TextField(default="", null=True, blank=True)
     numViews = models.IntegerField(default=0)
     def __str__(self):
         return self.title + 'by' + ' ' + self.author.first_name
+    
+    # def get_absolute_url(self):
+    #     return reverse('update_post', args=[self.id])
+    # print(get_absolute_url())
+    
+    #generating unique slug
+    # def save(self, *args, **kwargs): # new
+    #   if not self.slug:
+    #     self.slug = slugify(self.title) + str(self.id)
+    #   return super().save(*args, **kwargs)
+   
+
 class BlogComment(models.Model): 
     comment_id=models.AutoField(primary_key=True) 
     user=models.ForeignKey(User,null=True,on_delete=models.CASCADE)
@@ -80,3 +94,4 @@ class BlogComment(models.Model):
     def __str__(self):
         return self.comment[0:13] + ' ' + 'By' + ' ' +  self.user.first_name
 
+       

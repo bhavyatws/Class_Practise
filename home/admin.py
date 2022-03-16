@@ -44,4 +44,7 @@ class CustomUserAdmin(UserAdmin):
     )
     
 admin.site.register(get_user_model(),CustomUserAdmin)
-admin.site.register((Blog,BlogComment))
+admin.site.register((BlogComment))
+@admin.register(Blog)
+class BlogAdmin(admin.ModelAdmin):
+    list_display=['title','description','thumbnail','author']
