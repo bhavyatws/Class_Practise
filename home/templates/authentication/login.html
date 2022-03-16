@@ -1,0 +1,80 @@
+{% extends 'base.html' %} 
+{% block title %}Login{% endblock title %}
+{% load static %} {% block css %}
+<link href="{% static 'css/sign.css' type=" text/css " %}">
+
+<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=x8U2G54Ozgv3p-DpUHQ0gpTk0J3YbFKxe6DgHPPX7xxBzCDuOnFlPqFW4ggxjs0w154DR9KGbyal3zNGFWQFpvwszghTdgd-ByUDW7Oa1NU" charset="UTF-8"></script>
+<style>
+    .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+    }
+    
+    @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+            font-size: 3.5rem;
+        }
+    }
+    .register{
+        text-decoration:None;
+        border:2px;
+    }
+</style>
+
+{% endblock css %} {% block content %}
+
+<div class="text-center container">
+    {% if messages %}
+    {% for message in messages %}
+    
+    
+    
+      <div class="alert alert-success  alert-dismissible fade show" role="alert">
+        <strong>{{message}}</strong> 
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% endfor %}
+      {% endif %}
+    <main class="form-signin container w-50">
+        <form method="POST" action="{% url 'signin' %}" novalidate>
+            {% csrf_token %} 
+            <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+
+            
+            {% for fm in form %}
+            <div>
+                {{fm.label_tag}}{{fm}}
+                <small>{{fm.error|striptags}}</small>
+            </div>
+            {% endfor %}
+            {% if form.non_field_errors %}
+            {% for error in form.non_field_errors %}
+           
+            <div class="alert alert-info alert-dismissible fade show mt-2" role="alert">
+                <strong>{{error}}</strong> 
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+            {% endfor %}
+      
+        {% endif %}
+            <div class="checkbox mb-3">
+                <label>
+          <input type="checkbox" value="remember-me"> Remember me
+        
+            </div>
+            <button class="w-25 btn btn-lg btn-primary" type="submit">Sign in</button>
+           
+            <br><a class="register mt-2 w-25 btn btn-lg btn-primary" href="{% url 'register' %}">SignUp</a>
+            <br><a class="register mt-2 w-25 btn btn-lg btn-primary" href="{% url 'home' %}">Home</a>
+            
+            <p class="mt-5 mb-3 text-muted">&copy; 2021–2022</p>
+        </form>
+    </main>
+</div>
+
+{% endblock content %}

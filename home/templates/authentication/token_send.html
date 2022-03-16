@@ -1,0 +1,11 @@
+{% extends 'base.html' %} {% block titile %}Token Send{% endblock titile %} {% block content %}
+<h3>Token Send</h3>
+{% if messages %} {% for message in messages %}
+<h5>Please Check Your Mail</h5>
+
+<div class="alert alert-success" role="alert">
+    {{message}}
+</div>
+{% endfor %} {% endif %}
+
+{% endblock content %}

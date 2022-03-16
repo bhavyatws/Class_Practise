@@ -1,0 +1,83 @@
+ {% extends 'base.html' %}
+ {% block title %}Register{% endblock title %}
+{% load static %}
+{% block css %}
+<link href="{% static 'css/sign.css' type="text/css" %}">
+
+<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=x8U2G54Ozgv3p-DpUHQ0gpTk0J3YbFKxe6DgHPPX7xxBzCDuOnFlPqFW4ggxjs0w154DR9KGbyal3zNGFWQFpvwszghTdgd-ByUDW7Oa1NU" charset="UTF-8"></script><style>
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+    }
+
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+    }
+  </style>
+
+{% endblock css %}
+{% block content %}
+
+<div class="text-center container">
+    {% for message in messages %}
+    {{message}}
+    {% endfor %}
+<main class="form-signin container form-control">
+    <form method="POST" action="{% url 'register' %}" novalidate >
+        {% csrf_token %}
+      {% comment %} <img class="mb-4" src="/docs/5.1/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57"> {% endcomment %}
+      <h1 class="h3 mb-3 fw-normal">Register</h1>
+      {% comment %} <div class="form-floating mt-2">
+        <input type="text" name="name" class="form-control" id="floatingInput"  placeholder="Enter Name">
+        <label for="floatingInput">Name</label>
+      </div>
+      <div class="form-floating mt-2">
+        <input type="email" name="email" class="form-control" id="floatingInput"  placeholder="name@example.com">
+        <label for="floatingInput">Email address</label>
+      </div>
+      <div class="form-floating mt-2">
+        <input type="password" name="password1" class="form-control" id="floatingPassword" placeholder="Password">
+        <label for="floatingPassword">Password</label>
+      </div>
+      <div class="form-floating mt-2">
+        <input type="password" name="password2" class="form-control" id="floatingPassword" placeholder="Re-Password">
+        <label for="floatingPassword">Re-Password</label>
+      </div> {% endcomment %}
+      {% comment %} {{form.as_p}} {% endcomment %}
+      {% for fm in form %}
+      <div>
+          {{fm.label_tag}}{{fm}}
+          <small>{{fm.error|striptags}}</small>
+      </div>
+      {% endfor %}
+      {% if form.non_field_errors %}
+      {% for error in form.non_field_errors %}
+     
+      <div class="alert alert-info alert-dismissible fade show mt-2" role="alert">
+          <strong>{{error}}</strong> 
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      {% endfor %}
+
+  {% endif %}
+      <div class="checkbox mb-3">
+        <label>
+          <input type="checkbox" value="remember-me"> Remember me
+        </label>
+      </div>
+      <button class="w-25 btn btn-lg btn-primary" type="submit">Sign Up</button>
+      <br><a class="register mt-2 w-25 btn btn-lg btn-primary" href="{% url 'home' %}">Home</a>
+      <p class="mt-5 mb-3 text-muted">&copy; 2017–2021</p>
+    </form>
+    
+  </main>
+</div>
+  
+{% endblock content %}

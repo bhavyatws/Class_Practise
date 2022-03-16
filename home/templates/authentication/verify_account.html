@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block titile %}Success{% endblock titile %}
+{% block content %}
+<h4>Successs</h4>
+{% if messages %}
+{% for message in messages %}
+{{message}}
+{% endfor %}{% endif %}
+<a href="{% url 'signin' %}" class="btn btn-primary">Login</a>
+{% endblock content %}

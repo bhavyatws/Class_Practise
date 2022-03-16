@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Logout{% endblock title %}Logout
+{% block content %}
+
+<div class="container mt-3 text-center">
+    <form method="POST" action="{% url 'logout' %}" novalidate>
+        {% csrf_token %} {% comment %} <img class="mb-4" src="/docs/5.1/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57"> {% endcomment %}
+        <h1 class="h3 mb-3 fw-normal">Are you sure want to Logout?</h1>
+    
+        
+       
+    
+        <button class="w-25 btn btn-lg btn-danger mt-2" type="submit">Yes,Logout</button>
+       
+        
+        <br><a class="register mt-2 w-25 btn btn-lg btn-primary" href="{% url 'home' %}">Home</a>
+        
+        <p class="mt-5 mb-3 text-muted">&copy; 2021–2022</p>
+    </form>
+</div>
+
+{% endblock content %}
+
+

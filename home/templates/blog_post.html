@@ -1,0 +1,109 @@
+{% extends 'base.html' %} {% load static %} {% load humanize %} {% load extra_filter %} {% block title %}Blog-Post{% endblock title %} {% block content %}
+<div class="container mt-3 mp-4">
+    <div class="col-md-8">
+        <h3 class="pb-4 mb-4 fst-italic border-bottom">
+            Welcome | <a href="{% url 'home' %}" class="anchor-tag text-dark">Back to home
+            </a>
+        </h3>
+        {% if messages %} {% for message in messages %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>{{message}}!</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %} {% endif %}
+
+
+
+
+
+        <article class="blog-post">
+            <h2 class="blog-post-title">{{blog.title}}</h2>
+            <p class="blog-post-meta">
+                <h5>{{blog.date_created}}, Author:{{blog.author.first_name}}</h5>
+            </p>
+
+            <p>
+                <h6>{{blog.description}}</h6>
+
+            </p>
+            <h3>{{blog.numViews}}</h3>
+            <h3>{{blog.Viewers}}</h3>
+            <hr>
+
+
+
+    </div>
+    <div class="container">
+        <h2>Comment({{comment.count}})</h2>
+        {% if request.user.is_authenticated %}
+        <form action="{% url 'postcomment' blog.slug  %}" method="POST" class="form-group mt-2">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">
+                    <h4>Post Comment</h4>
+                </label>
+                <input type="text" class="form-control" name="comment" placeholder="Enter Comment here" aria-describedby="emailHelp">
+                <input type="hidden" name="post_id" value="{{blog.post_id}}">
+                <input type="hidden" name="parentSno" value="">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        {% else %}
+        <h4 class="mt-2">Please login to post-comment</h4> {% endif %} {% for comment in comment %}
+
+
+        <div class="row my-2  mx-0">
+            <div class="col-md-1 "><img src="/static/userprofile.png" class="profile-im p-2 w-100 rounded mx-auto d-block border border-dark" alt=""></div>
+            <div class="col-md-11 ">
+                <div><b>{{comment.user.first_name}}</b> <span class="naturaltime ">
+                        <i>{{comment.comment_datetime|naturaltime}}</i></span></div>
+                {{comment}} {% if request.user.is_authenticated %}
+                <div class="reply mx-0">
+                    <p>
+                        <a class="btn btn-primary btn-sm" data-target="#replyBox{{comment.comment_id}}" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                         
+                            Reply
+                        </a>
+
+                    </p>
+                    <div class="collapse my-2" id="replyBox{{comment.comment_id}}">
+                        <div class="card card-body">
+                            <form action="{% url 'postcomment' blog.slug  %}" method="POST" class="form-group mt-2">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <label for="exampleInputEmail1" class="form-label">
+                                        <h4>Reply Comment</h4>
+                                    </label>
+                                    <input type="text" class="form-control" name="comment" placeholder="Enter Comment here" aria-describedby="emailHelp">
+                                    <input type="hidden" name="post_id" value="{{blog.post_id}}">
+                                    <input type="hidden" name="parentSno" value="{{comment.comment_id}}">
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="replies ">
+                        {% for reply in replyDict|get_value:comment.comment_id %}
+                        <div class="row my-1">
+                            <div class="col-md-1 "><img src="/static/userprofile.png" class="profile-im p-2 w-75 rounded mx-auto d-block border border-dark" alt=""></div>
+                            <div class="col-md-11 my-3">
+                                <div><b>{{reply.user.first_name}}</b> <span class="naturaltime ">
+                                    <i>{{reply.comment_datetime|naturaltime}}</i></span></div>
+                                {{reply.comment}}
+                            </div>
+                        </div>
+
+                        <br> {% comment %} {{reply.comment}}->it return all BlogComment sliced by 13 character ->it means __self__(str) function run bhaihalxa {% endcomment %} {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+
+{% endblock content %}

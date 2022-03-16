@@ -1,0 +1,11 @@
+{% extends 'base.html' %} {% block title %}Confirm Delete{% endblock title %} {% block content %}
+<h3>Are you sure want to delete?</h3>
+{% comment %} {% for blog in queryset %} {% endcomment %}
+<form method="POST" action="{% url 'delete_post' blog.post_id %}">
+    {% csrf_token %}
+    <button class="btn btn-danger">Delete</button>
+</form>
+{% comment %} {% endfor %} {% endcomment %}
+<div class="container mt-2"><a class="anchor-tag btn btn-secondary mt-2" href="{% url 'home' %}">Back to Home</a></div>
+
+{% endblock content %}
