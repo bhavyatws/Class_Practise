@@ -279,5 +279,5 @@ class CommenPostView(LoginRequiredMixin,View):
             reply.save()
             messages.success(self.request,'Your reply has been posted successfully!')
         
-        return redirect(f'/continue-reading/{blog.slug}')
+        return redirect(f'/continue-reading/{blog.slug}') 
         
