@@ -4,11 +4,11 @@
     Blog
 {% endblock title %}
 {% block content %}
-<style>
+    <style>
     .link{
         text-decoration:none;
     }
-</style>
+    </style>
     <nav class="navbar navbar-expand-lg"
          class="navbar navbar-light"
          style="background-color: #e3f2fd;">
@@ -29,21 +29,24 @@
                         <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
                     </li>
                     {% if request.user.is_authenticated %}
-                    <li class="nav-item">
-                      <a class="nav-link" href="{% url 'addpost' %}">Add Post</a>
-                  </li>
-                   
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'addpost' %}">Add Post</a>
+                        </li>
                     {% endif %}
-                   
                 </ul>
-                {% if messages %} {% for message in messages %}
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <strong>{{message}}!</strong>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        {% endfor %} {% endif %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong>{{ message }}!</strong>
+                            <button type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
                 {% if request.user.is_authenticated %}
-                    <li class="nav-item dropdown">
+                    <li class="nav-item dropdown" style=" list-style: none; ">
                         <a class="nav-link dropdown-toggle"
                            href="#"
                            id="navbarDropdown"
@@ -54,7 +57,6 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <form method="GET" action="{% url 'logout' %}">
-                                
                                 <li>
                                     <button input="submit" class="dropdown-item">Logout</button>
                                 </li>
@@ -71,8 +73,8 @@
                 </li>
                 <form class="d-flex" method="GET" action="{% url 'search' %}">
                     <input class="form-control me-2"
-                            name="query"
-                            id="query"
+                           name="query"
+                           id="query"
                            type="search"
                            placeholder="Search"
                            aria-label="Search">
@@ -84,55 +86,48 @@
     <div class="container mt-4">
         <div class="row mb-2">
             {% for blog in object_list %}
-                <div class="row mb-2">
-                    <div class="col md-6">
-                        <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-                            <div class="col p-4 d-flex flex-column position-static">
-                                                               <h3 class="mb-0">{{ blog.title }}</h3>
-                                <div class="mb-1 text-muted">{{ blog.date_created }}</div>
-                                <p class="card-text mb-auto">
-                                    {{ blog.description }}
-                                </p>
-                                <a href="{% url 'blog' blog.slug %}" class="link" >Continue reading</a>
-                                {% if request.user == blog.author %}
+                <div class="col md-6">
+                    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                        <div class="col p-4 d-flex flex-column position-static">
+                            <h3 class="mb-0">{{ blog.title }}</h3>
+                            <div class="mb-1 text-muted">{{ blog.date_created }}</div>
+                            <p class="card-text mb-auto">
+                                {{ blog.description }}
+                            </p>
+                            <p>Views:{{blog.numViews}}</p>
+                            <a href="{% url 'blog' blog.slug %}" class="link">Continue reading</a>
+                            {% if request.user == blog.author %}
                                 <a href="{% url 'update_post' blog.post_id %}" class="link">Update</a>
-                                <a  href="{% url 'delete_post' blog.post_id %}" class="link" >Delete</a>
-                               
-<div id="result"></div>
-                           
-                                {% else %}
-                                <h5>Author:<i>{{blog.author.first_name}}<i></h5>
-                                {% endif %}
-                            
-                            </div>
-                            
-                            <div class="col-auto d-none d-lg-block">
-                                <img class="bd-placeholder-img"
-                                     width="200"
-                                     height="250"
-                                     src="{{ blog.thumbnail.url }}"
-                                     role="img"
-                                     aria-label="Placeholder: Thumbnail"
-                                     preserveAspectRatio="xMidYMid slice"
-                                     focusable="false">
-                                    <title>Placeholder</title>
-                                    {% comment %} <rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef"
-                                    dy=".3em">Thumbnail</text> {% endcomment %}
-                            </img>
-                            </div> 
-                            
+                                <a href="{% url 'delete_post' blog.post_id %}" class="link">Delete</a>
+                                <div id="result"></div>
+                            {% else %}
+                                <h5>
+                                    Author:<i>{{ blog.author.first_name }}</i>
+                                </h5>
+                            {% endif %}
                         </div>
-                        {% if forloop.counter|divisibleby:2 %}
-                        </div>
-                      </div>
-                      
+                        <div class="col-auto d-none d-lg-block">
+                            <img class="bd-placeholder-img"
+                                 width="200"
+                                 height="250"
+                                 src="{{ blog.thumbnail.url }}"
+                                 role="img"
+                                 aria-label="Placeholder: Thumbnail"
+                                 preserveAspectRatio="xMidYMid slice"
+                                 focusable="false">
+                            <title>Placeholder</title>
+                            {% comment %} <rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef"
+                            dy=".3em">Thumbnail</text> {% endcomment %}
+                        </img>
                     </div>
-                    {% endif %}
+                </div>
+                {% if forloop.counter|divisibleby:2 %}
+                    {{ forloop.counter }}
                 
-            {% endfor %}
+            </div>
+            {% endif %}
         </div>
-    </div>
-
-
-
+    {% endfor %}
+</div>
+</div>
 {% endblock content %}
