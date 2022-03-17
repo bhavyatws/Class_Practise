@@ -116,14 +116,17 @@ class BlogUpdateView(LoginRequiredMixin, UpdateView):
        return  self.model.objects.filter(author=self.request.user)
 
     def dispatch(self, request, *args, **kwargs):
-        """ Making sure that only authors can update stories """
-        obj = self.get_object()
-        if obj.author != self.request.user:
-            # return redirect(obj)
-            return HttpResponse('Permission Denied')
-        slug=self.kwargs['slug']
-        blog=Blog.objects.filter(slug=slug)
+        # """ Making sure that only authors can update stories """
+        # obj = self.get_object()
+        # if obj.author != self.request.user:
+        #     # return redirect(obj)
+        #     return HttpResponse('Permission Denied')
+        pk=self.kwargs['pk']
+        print(pk)
+        blog=Blog.objects.filter(pk=pk).filter(author=request.user)
+        print(blog)
         if not blog.exists():
+            print("not exiiss")
             return redirect('home')
         return super(UpdateView, self).dispatch(request, *args, **kwargs)
    
@@ -138,9 +141,10 @@ class BlogDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_queryset(self):
         return self.model.objects.filter(author=self.request.user)
+
     def dispatch(self, *args, **kwargs):
-        slug=self.kwargs['slug']
-        blog=Blog.objects.filter(slug=slug,author=self.request.user)
+        pk=self.kwargs['pk']
+        blog=Blog.objects.filter(pk=pk).filter(author=self.request.user).first()
         if not blog.exists():
             return redirect('home')
         
@@ -192,7 +196,7 @@ class Register(generic.CreateView):
     def form_valid(self, form):
         form.is_staff=True
         form.is_active=True
-        messages.success(self.request, f'Account created successfully')
+        messages.success(self.request, f'Email Verification has link has been sent on your mail')
         return super().form_valid(form)
 
 class Search(ListView):
